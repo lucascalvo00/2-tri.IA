@@ -1,72 +1,113 @@
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const caixaResultado = document.querySelector(".caixa-resultado");
+const textoResultado = document.querySelector(".texto-resultado");
+
 const perguntas = [
     {
-        enunciado: "Pergunta 1",
+        enunciado: "Você ganha a habilidade de dominar qualquer esporte instantaneamente. Qual esporte você escolhe?",
         alternativas: [
-            "Alternativa 1",
-            "Alternativa 2"
+            {
+                texto: "Futebol",
+                afirmacao: "Você adora a emoção do futebol e quer jogar como um profissional."
+            },
+            {
+                texto: "Natação",
+                afirmacao: "Você gosta de esportes aquáticos e quer nadar como um campeão olímpico."
+            }
         ]
     },
     {
-        enunciado: "Pergunta 2",
+        enunciado: "Você pode passar um dia com qualquer celebridade. Quem você escolhe?",
         alternativas: [
-            "Alternativa 1",
-            "Alternativa 2"
-        ]
-    }
-]; 
-const perguntas = [
-    {
-        enunciado: "Assim que saiu da escola você se depara com uma nova tecnologia, um chat que consegue responder todas as dúvidas que uma pessoa pode ter, ele também gera imagens e áudios hiper-realistas. Qual o primeiro pensamento?",
-        alternativas: [
-            "Isso é assustador!",
-            "Isso é maravilhoso!"
+            {
+                texto: "Um ator/atriz famoso(a)",
+                afirmacao: "Você é fã de cinema e gostaria de saber mais sobre a vida de um ator ou atriz."
+            },
+            {
+                texto: "Um músico famoso",
+                afirmacao: "Você é apaixonado por música e quer ver como é o dia a dia de um músico famoso."
+            }
         ]
     },
     {
-        enunciado: "Com a descoberta desta tecnologia, chamada Inteligência Artificial, uma professora de tecnologia da escola decidiu fazer uma sequência de aulas sobre esta tecnologia. No fim de uma aula ela pede que você escreva um trabalho sobre o uso de IA em sala de aula. Qual atitude você toma?",
+        enunciado: "Você tem a chance de aprender qualquer instrumento musical em um dia. Qual você escolhe?",
         alternativas: [
-            "Utiliza uma ferramenta de busca na internet que utiliza IA para que ela ajude a encontrar informações relevantes para o trabalho e explique numa linguagem que facilite o entendimento.",
-            "Escreve o trabalho com base nas conversas que teve com colegas, algumas pesquisas na internet e conhecimentos próprios sobre o tema."
+            {
+                texto: "Piano",
+                afirmacao: "Você sempre quis tocar piano e criar belas melodias."
+            },
+            {
+                texto: "Guitarra",
+                afirmacao: "Você quer tocar guitarra e sentir a energia de uma performance ao vivo."
+            }
         ]
     },
     {
-        enunciado: "Após a elaboração do trabalho escrito, a professora realizou um debate entre a turma para entender como foi realizada a pesquisa e escrita. Nessa conversa também foi levantado um ponto muito importante: como a IA impacta o trabalho do futuro. Nesse debate, como você se posiciona?",
+        enunciado: "Você encontra um artefato antigo que concede um desejo. O que você deseja?",
         alternativas: [
-            "Defende a ideia de que a IA pode criar novas oportunidades de emprego e melhorar habilidades humanas.",
-            "Me preocupo com as pessoas que perderão seus empregos para máquinas e defendem a importância de proteger os trabalhadores."
+            {
+                texto: "Paz mundial",
+                afirmacao: "Você deseja um mundo sem conflitos e cheio de harmonia."
+            },
+            {
+                texto: "Conhecimento infinito",
+                afirmacao: "Você quer saber tudo sobre o universo e seus mistérios."
+            }
         ]
     },
     {
-        enunciado: "Ao final da discussão, você precisou criar uma imagem no computador que representasse o que pensa sobre IA. E agora?",
+        enunciado: "Você pode se transformar em qualquer personagem de um filme por um dia. Quem você escolhe?",
         alternativas: [
-            "Criar uma imagem utilizando uma plataforma de design como o Paint.",
-            "Criar uma imagem utilizando um gerador de imagem de IA."
+            {
+                texto: "Um super-herói",
+                afirmacao: "Você quer experimentar ter superpoderes e salvar o dia."
+            },
+            {
+                texto: "Um personagem de fantasia",
+                afirmacao: "Você quer viver em um mundo mágico e cheio de aventuras."
+            }
         ]
     },
-    {
-        enunciado: "Você tem um trabalho em grupo de biologia para entregar na semana seguinte, o andamento do trabalho está um pouco atrasado e uma pessoa do seu grupo decidiu fazer com ajuda da IA. O problema é que o trabalho está totalmente igual ao do chat. O que você faz? ",
-        alternativas: [
-            "Escrever comandos para o chat é uma forma de contribuir com o trabalho, por isso não é um problema utilizar o texto inteiro.",
-            "O chat pode ser uma tecnologia muito avançada, mas é preciso manter a atenção pois toda máquina erra, por isso revisar o trabalho e contribuir com as perspectivas pessoais é essencial."
-        ]
-    }
-]
+];
+
+
 let atual = 0;
 let perguntaAtual;
+let historiaFinal = "";
 
 function mostraPergunta() {
+    if (atual >= perguntas.length) {
+        mostraResultado();
+        return;
+    }
     perguntaAtual = perguntas[atual];
     caixaPerguntas.textContent = perguntaAtual.enunciado;
+    caixaAlternativas.textContent = "";
     mostraAlternativas();
 }
-function mostraAlternativas() {
+
+function mostraAlternativas(){
     for(const alternativa of perguntaAtual.alternativas) {
         const botaoAlternativas = document.createElement("button");
-        botaoAlternativa.textContent = alternativa;
+        botaoAlternativas.textContent = alternativa.texto;
+        botaoAlternativas.addEventListener("click", () => respostaSelecionada(alternativa));
         caixaAlternativas.appendChild(botaoAlternativas);
     }
 }
 
+function respostaSelecionada(opcaoSelecionada) {
+    const afirmacoes = opcaoSelecionada.afirmacao;
+    historiaFinal += afirmacoes + " ";
+    atual++;
+    mostraPergunta();
+}
+
+function mostraResultado() {
+    caixaPerguntas.textContent = "Em 2049...";
+    textoResultado.textContent = historiaFinal;
+    caixaAlternativas.textContent = "";
+}
+
 mostraPergunta();
-
-
